@@ -1,0 +1,1 @@
+export const colors = ["Red", "Black", "White", "Yellow", "Green"]

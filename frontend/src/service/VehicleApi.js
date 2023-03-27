@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 export const vehicleApiSlice = createApi({
-  reducerPath: "vehicleApiSlice",
+  reducerPath: "vehicleApiSlice", // name of the reducer
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/vehicle",
-    credentials: "include",
+    baseUrl: "http://localhost:5000/api/vehicle", // backend url for vehicle
+    credentials: "include", // to send cookies
   }),
-  tagTypes: ["Vehicle"],
+  tagTypes: ["Vehicle"], // tag for invalidation
   endpoints: (builder) => ({
     getCars: builder.query({
       query: () => "/",
@@ -17,7 +18,7 @@ export const vehicleApiSlice = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Vehicle"],
+      invalidatesTags: ["Vehicle"], // invalidates the tag
     }),
     deleteCar: builder.mutation({
       query: (id) => ({
@@ -36,6 +37,9 @@ export const vehicleApiSlice = createApi({
     }),
   }),
 });
+
+// Export hooks for usage in functional components, which are auto-generated based on the defined endpoints
+
 export const {
   useGetCarsQuery,
   useCreateCarMutation,

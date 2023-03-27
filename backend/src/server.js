@@ -28,6 +28,7 @@ app.use(
 
 // let import the routes
 const authRoute = require("./routes/auth");
+const vehicleRoute = require("./routes/vehicle");
 
 // Lets connect to monogoDB ...
 mongoose
@@ -37,6 +38,7 @@ mongoose
 
 // use the routes
 app.use("/api/auth", authRoute);
+app.use("/api/vehicle", vehicleRoute);
 
 // Add port and connect to server
 app.listen(PORT, () => {

@@ -42,7 +42,11 @@ router.post(
       });
 
       // Lets send the password to the user via email
-      sendEmail(email, "Welcome to our site!", `Your password is ${password}`);
+      sendEmail(
+        email,
+        "Welcome to our site!",
+        `Your password is ${password}. Please go to this url ${`http://localhost:3000/login`} and login with your password and email. Thank You`
+      );
 
       // Lets hash the password
       const salt = await bcrypt.genSalt(8);

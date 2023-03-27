@@ -1,5 +1,5 @@
 import React from "react";
-import Table from "../../components/MaterialTable";
+import Table from "../table/MaterialTable";
 import NavBar from "../NavBar";
 
 export default function Home() {

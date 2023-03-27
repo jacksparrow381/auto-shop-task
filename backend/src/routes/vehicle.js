@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const User = require("../models/User");
 const Vehicle = require("../models/Vehicle");
 const authMiddleware = require("../middlewares/authMiddleware");
+const { check, param, validationResult } = require("express-validator");
 
 router.get("/", authMiddleware, async (req, res) => {
   try {
@@ -12,75 +12,134 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/create", authMiddleware, async (req, res) => {
-  try {
-    const {
-      carName,
-      carCategory,
-      carColor,
-      carPrice,
-      carMake,
-      carRegistrationNumber,
-      carModel,
-    } = req.body;
+router.post(
+  "/create",
+  [
+    check("carName", "Car name is required").isString().not().isEmpty(),
+    check("carCategory", "Car category is required").isString().not().isEmpty(),
+    check("carColor", "Car color is required").isString().not().isEmpty(),
+    check("carPrice", "Car price is required").isString().not().isEmpty(),
+    check("carMake", "Car make is required").isString().not().isEmpty(),
+    check("carRegistrationNumber", "Car registration number is required")
+      .isString()
+      .not()
+      .isEmpty(),
+    check("carModel", "Car model is required").isString().not().isEmpty(),
+  ],
+  authMiddleware,
+  async (req, res) => {
+    try {
+      // Lets check if there are any errors in the request body
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+        return;
+      }
 
-    const vehicle = new Vehicle({
-      verhicle_name: carName,
-      registration_number: carRegistrationNumber,
-      category: carCategory,
-      model: carModel,
-      color: carColor,
-      make: carMake,
-      price: carPrice,
-    });
+      const {
+        carName,
+        carCategory,
+        carColor,
+        carPrice,
+        carMake,
+        carRegistrationNumber,
+        carModel,
+      } = req.body;
 
-    await vehicle.save();
+      const vehicle = new Vehicle({
+        verhicle_name: carName,
+        registration_number: carRegistrationNumber,
+        category: carCategory,
+        model: carModel,
+        color: carColor,
+        make: carMake,
+        price: carPrice,
+      });
 
-    res.send(vehicle);
-  } catch (error) {
-    res.send(error);
+      await vehicle.save();
+
+      res.send(vehicle);
+    } catch (error) {
+      res.send(error);
+    }
   }
-});
+);
 
-router.put("/update/:id", authMiddleware, async (req, res) => {
-  try {
-    const {
-      carName,
-      carCategory,
-      carColor,
-      carPrice,
-      carMake,
-      carRegistrationNumber,
-      carModel,
-    } = req.body;
+router.put(
+  "/update/:id",
+  [
+    check("carName", "Car name is required").isString().not().isEmpty(),
+    check("carCategory", "Car category is required").isString().not().isEmpty(),
+    check("carColor", "Car color is required").isString().not().isEmpty(),
+    check("carPrice", "Car price is required").isString().not().isEmpty(),
+    check("carMake", "Car make is required").isString().not().isEmpty(),
+    check(
+      "carRegistrationNumber",
+      "Car registration number is required"
+    ).isString(),
+    param("id", "Vehicle id is required").isString().not().isEmpty(),
+  ],
+  authMiddleware,
+  async (req, res) => {
+    try {
+      // Lets check if there are any errors in the request body
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+        return;
+      }
 
-    await Vehicle.findByIdAndUpdate(req.params.id, {
-      verhicle_name: carName,
-      registration_number: carRegistrationNumber,
-      category: carCategory,
-      model: carModel,
-      color: carColor,
-      make: carMake,
-      price: carPrice,
-    });
+      // Lets get the data from the request body
+      const {
+        carName,
+        carCategory,
+        carColor,
+        carPrice,
+        carMake,
+        carRegistrationNumber,
+        carModel,
+      } = req.body;
 
-    const vehicles = await Vehicle.find();
+      await Vehicle.findByIdAndUpdate(req.params.id, {
+        verhicle_name: carName,
+        registration_number: carRegistrationNumber,
+        category: carCategory,
+        model: carModel,
+        color: carColor,
+        make: carMake,
+        price: carPrice,
+      });
 
-    res.send(vehicles);
-  } catch (error) {
-    res.send(error);
+      const vehicles = await Vehicle.find();
+
+      res.send(vehicles);
+    } catch (error) {
+      res.send(error);
+    }
   }
-});
+);
 
-router.delete("/delete/:id", authMiddleware, async (req, res) => {
-  try {
-    await Vehicle.findByIdAndDelete(req.params.id);
+router.delete(
+  "/delete/:id",
+  [param("id", "Vehicle id is required").isString().not().isEmpty()],
+  authMiddleware,
+  async (req, res) => {
+    try {
+      // Lets check if there are any errors in the request body
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+        return;
+      }
 
-    const vehicles = await Vehicle.find();
-    res.send(vehicles);
-  } catch (error) {
-    res.send(error);
+      await Vehicle.findByIdAndDelete(req.params.id);
+
+      const vehicles = await Vehicle.find();
+      res.send(vehicles);
+    } catch (error) {
+      res.send(error);
+    }
   }
-});
+);
 
 module.exports = router;

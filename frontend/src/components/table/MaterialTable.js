@@ -1,11 +1,15 @@
 import React from "react";
 import MaterialTable from "@material-table/core";
-import AddCarDrawer from "./AddCarDrawer";
-import axios from "axios";
+import AddCarDrawer from "../vehicle/AddCarDrawer";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useDeleteCarMutation, useGetCarsQuery } from "../service/VehicleApi";
+import {
+  useDeleteCarMutation,
+  useGetCarsQuery,
+} from "../../service/VehicleApi";
+import { Box } from "@mui/system";
 
+// define columns to be displayed in the table
 const columns = [
   { title: "Name", field: "verhicle_name" },
   { title: "Category", field: "category" },
@@ -17,18 +21,21 @@ const columns = [
 ];
 
 export default function Table() {
-  const [cars, setCars] = React.useState([]);
-  const [editedRow, setEditedRow] = React.useState(null);
+  const [isOpen, setIsOpen] = React.useState(false); // state to control the drawer
+  const [editedRow, setEditedRow] = React.useState(null); // state to control the edited row
 
-  const { data, isLoading, isSuccess, isError, error } = useGetCarsQuery();
+  const { data } = useGetCarsQuery();
   const [deleteCar] = useDeleteCarMutation();
 
-  console.log(data, isLoading, isSuccess, isError, error);
+  const handleOpen = () => setIsOpen(true); // function to open the drawer
 
-  const [isOpen, setIsOpen] = React.useState(false);
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
+  // function to close the drawer
+  const handleClose = () => {
+    setEditedRow(null);
+    setIsOpen(false);
+  };
 
+  // function to delete a car
   const handleDelete = async (id) => {
     try {
       await deleteCar(id);
@@ -37,6 +44,7 @@ export default function Table() {
     }
   };
 
+  // function to edit a car
   const handleEdit = (id) => {
     try {
       const editedCar = data.find((car) => car._id === id);
@@ -48,13 +56,22 @@ export default function Table() {
   };
 
   return (
-    <div>
-      <AddCarDrawer
-        editedRow={editedRow}
-        isOpen={isOpen}
-        handleOpen={handleOpen}
-        handleClose={handleClose}
-      />
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        {/** drawer to add or edit a car */}
+        <AddCarDrawer
+          editedRow={editedRow}
+          isOpen={isOpen}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+        />
+      </Box>
+      {/** table to display the cars */}
       <MaterialTable
         title="Registered Cars"
         options={{
@@ -76,6 +93,6 @@ export default function Table() {
           }),
         ]}
       />
-    </div>
+    </Box>
   );
 }

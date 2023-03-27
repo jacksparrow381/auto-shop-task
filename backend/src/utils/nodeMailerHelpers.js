@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 
+// create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -8,6 +9,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// setup email data with unicode symbols
 const sendEmail = (to, subject, text) => {
   const mailOptions = {
     from: "baleesha01@gmail.com",
@@ -15,6 +17,9 @@ const sendEmail = (to, subject, text) => {
     subject,
     text,
   };
+
+  // send mail with defined transport object
+
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);

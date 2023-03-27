@@ -16,12 +16,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const schema = Yup.object().shape({
+  name: Yup.string()
+    .required("*Name is a required field")
+    .min(3, "*Name must be at least 3 characters"),
   email: Yup.string()
     .required("*Email is a required field")
     .email("Invalid email format"),
-  password: Yup.string()
-    .required("*Password is a required field")
-    .min(8, "*Password must be at least 8 characters"),
 });
 
 function Copyright(props) {
@@ -44,25 +44,26 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const LoginPage = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   return (
     <>
       {/* Wrapping form inside formik tag and passing our schema to validationSchema prop */}
       <Formik
         validationSchema={schema}
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ name: "", email: "" }}
         onSubmit={async (values) => {
           const response = await axios.post(
-            "http://localhost:5000/api/auth/login",
-            values,
-            { withCredentials: true }
+            "http://localhost:5000/api/auth/signUp",
+            values
           );
 
           if (response.status === 200) {
-            localStorage.setItem("user-token", true);
-            localStorage.setItem("user-name", response.data);
-            navigate("/home");
+            // clear the form
+            values.name = "";
+            values.email = "";
+            // redirect to success page
+            navigate("/success");
           }
         }}
       >
@@ -72,6 +73,7 @@ const LoginPage = () => {
           touched,
           handleChange,
           handleBlur,
+          setFieldValue,
           handleSubmit,
         }) => (
           <ThemeProvider theme={theme}>
@@ -84,7 +86,7 @@ const LoginPage = () => {
                 md={7}
                 sx={{
                   backgroundImage:
-                    "url(https://d1ayzle075vvju.cloudfront.net/2022/08/3567818-1.jpg)",
+                    "url(https://media.licdn.com/dms/image/C5612AQFuulMX5vBxwQ/article-cover_image-shrink_720_1280/0/1613916172320?e=2147483647&v=beta&t=C75K73RiesyzU9Opo23isR0fOjCog0FT_YhamMF1T0I)",
                   backgroundRepeat: "no-repeat",
                   backgroundColor: (t) =>
                     t.palette.mode === "light"
@@ -116,7 +118,7 @@ const LoginPage = () => {
                     <LockOutlinedIcon />
                   </Avatar>
                   <Typography component="h1" variant="h5">
-                    Log In
+                    Sign Up
                   </Typography>
                   <Box
                     component="form"
@@ -128,8 +130,29 @@ const LoginPage = () => {
                       margin="normal"
                       required
                       fullWidth
+                      id="name"
+                      onChange={(e) => {
+                        setFieldValue("name", e.target.value);
+                      }}
+                      onBlur={handleBlur}
+                      value={values.name}
+                      label="User Name"
+                      name="name"
+                      autoComplete="name"
+                      autoFocus
+                    />
+                    {/* If validation is not passed show errors */}
+                    <Typography style={{ color: "red" }}>
+                      {errors.name && touched.name && errors.name}
+                    </Typography>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
                       id="email"
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        setFieldValue("email", e.target.value);
+                      }}
                       onBlur={handleBlur}
                       value={values.email}
                       label="Email Address"
@@ -141,23 +164,6 @@ const LoginPage = () => {
                     <Typography style={{ color: "red" }}>
                       {errors.email && touched.email && errors.email}
                     </Typography>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                    />
-                    {/* If validation is not passed show errors */}
-                    <Typography style={{ color: "red" }}>
-                      {errors.password && touched.password && errors.password}
-                    </Typography>
 
                     <Button
                       type="submit"
@@ -165,17 +171,12 @@ const LoginPage = () => {
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                     >
-                      Login
+                      Sign Up
                     </Button>
                     <Grid container>
-                      <Grid item xs>
-                        <Link href="#" variant="body2">
-                          Forgot password?
-                        </Link>
-                      </Grid>
                       <Grid item>
-                        <Link href="/" variant="body2">
-                          {"Don't have an account? Sign Up"}
+                        <Link href="/login" variant="body2">
+                          {"Already have an account? Log In"}
                         </Link>
                       </Grid>
                     </Grid>
@@ -191,4 +192,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUp;

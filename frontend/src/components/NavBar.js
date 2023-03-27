@@ -1,49 +1,49 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
 import { Grid } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CategoryIcon from "@mui/icons-material/Category";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const NavBar = () => {
+  // get path from url
+  const path = window.location.pathname;
+
+  // handle logout
+  const handleLogout = async () => {
+    const response = await axios.post("http://localhost:5000/api/auth/logout", {
+      withCredentials: true, // to send cookies
+    });
+    if (response.status === 200) {
+      localStorage.removeItem("user-token");
+
+      window.location.href = "/login";
+    }
+  };
+
   return (
     <Grid container>
       <Grid item sx={{ width: "100%" }}>
         <AppBar position="static">
-          <Toolbar>
+          <Toolbar
+            sx={{
+              backgroundColor: "#2dba7a",
+            }}
+          >
             <Typography
               variant="h6"
               noWrap
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              sx={{ flexGrow: 1 }}
             >
-              Auto Registration App
+              Auto Vehicle App
             </Typography>
             <Grid
               sx={{ display: "flex", flexDirection: "row", columnGap: "20px" }}
             >
-              <Grid
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  mr: 2,
-                }}
-              >
-                <LocalShippingIcon />
-                <Typography
-                  sx={{ fontSize: "10px" }}
-                  variant="h6"
-                  noWrap
-                  component="div"
-                >
-                  Add Car
-                </Typography>
-              </Grid>
               <Grid
                 sx={{
                   display: "flex",
@@ -59,7 +59,12 @@ const NavBar = () => {
                   noWrap
                   component="div"
                 >
-                  Add Category
+                  <Link
+                    to={path === "/category" ? "/home" : "/category"}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    Go To {path === "/category" ? "Home" : "Category"}
+                  </Link>
                 </Typography>
               </Grid>
               <Grid
@@ -72,10 +77,11 @@ const NavBar = () => {
               >
                 <LogoutIcon />
                 <Typography
-                  sx={{ fontSize: "10px" }}
+                  sx={{ fontSize: "10px", cursor: "pointer" }}
                   variant="h6"
                   noWrap
                   component="div"
+                  onClick={handleLogout}
                 >
                   Logout
                 </Typography>

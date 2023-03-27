@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
-import { vehicleApiSlice } from "./service/VehicleApi";
+import { store } from "./store";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <ApiProvider api={vehicleApiSlice}>
+    <Provider store={store}>
       <App />
-    </ApiProvider>
+    </Provider>
   </BrowserRouter>
 );

@@ -18,13 +18,13 @@ router.post(
     check("carName", "Car name is required").isString().not().isEmpty(),
     check("carCategory", "Car category is required").isString().not().isEmpty(),
     check("carColor", "Car color is required").isString().not().isEmpty(),
-    check("carPrice", "Car price is required").isString().not().isEmpty(),
+    check("carPrice", "Car price is required").isNumeric().not().isEmpty(),
     check("carMake", "Car make is required").isString().not().isEmpty(),
     check("carRegistrationNumber", "Car registration number is required")
       .isString()
       .not()
       .isEmpty(),
-    check("carModel", "Car model is required").isString().not().isEmpty(),
+    check("carModel", "Car model is required").isNumeric().not().isEmpty(),
   ],
   authMiddleware,
   async (req, res) => {
@@ -71,7 +71,8 @@ router.put(
     check("carName", "Car name is required").isString().not().isEmpty(),
     check("carCategory", "Car category is required").isString().not().isEmpty(),
     check("carColor", "Car color is required").isString().not().isEmpty(),
-    check("carPrice", "Car price is required").isString().not().isEmpty(),
+    check("carPrice", "Car price is required").isNumeric().not().isEmpty(),
+    check("carModel", "Car model is required").isNumeric().not().isEmpty(),
     check("carMake", "Car make is required").isString().not().isEmpty(),
     check(
       "carRegistrationNumber",

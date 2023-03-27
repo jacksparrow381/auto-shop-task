@@ -154,6 +154,7 @@ export default function AddCarDrawer({
                         id="carPrice"
                         name="carPrice"
                         label="Car Price"
+                        type={"number"}
                         value={values.carPrice}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -164,6 +165,7 @@ export default function AddCarDrawer({
                       <TextField
                         id="carModel"
                         name="carModel"
+                        type={"number"}
                         label="Car Model"
                         value={values.carModel}
                         onChange={handleChange}

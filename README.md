@@ -12,6 +12,14 @@ This is a simple project in which I used authentication and nodeMailer to send a
 - Go to frontend folder and run `npm install`
 - Go to backend folder and run `npm install`
 
+## env file
+
+Please add the .env file in backend with following data:
+
+PORT = 5000
+DB_CONNECT = "mongodb://localhost:27017/test_auto_shop" // OR "the collection of your choice"
+TOKEN_SECRET = "asad123"
+
 ## Usage
 
 - Go to backend folder and run `npm run dev`

@@ -16,21 +16,21 @@ const vehicleSchema = new Schema(
       required: true,
     },
     model: {
-        type: Number,
-        required: true,
-      },
-      color: {
-        type: String,
-        required: true,
-      },
-      type: {
-        type: String,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
+      type: Number,
+      required: true,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+    make: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

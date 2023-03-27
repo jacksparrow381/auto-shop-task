@@ -62,7 +62,7 @@ const LoginPage = () => {
           if (response.status === 200) {
             localStorage.setItem("user-token", true);
             localStorage.setItem("user-name", response.data);
-            navigate("/jwt");
+            navigate("/home");
           }
         }}
       >

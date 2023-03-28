@@ -33,7 +33,11 @@ const categoryRoute = require("./routes/category");
 
 // Lets connect to monogoDB ...
 mongoose
-  .connect(process.env.DB_CONNECT)
+  .connect(process.env.DB_CONNECT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    family: 4,
+  })
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log(err));
 

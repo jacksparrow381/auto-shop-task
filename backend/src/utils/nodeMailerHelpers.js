@@ -2,25 +2,27 @@ const nodemailer = require("nodemailer");
 
 // create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
-  emailFrom: "baleesha01@gmail.com",
+  emailFrom: "the email address you want to send from",
   host: "smtp.gmail.com", // hostname
   secureConnection: true, // use SSL
   port: 465, // port for secure SMTP
   transportMethod: "SMTP", // default is SMTP.
   auth: {
-    user: "baleesha01@gmail.com",
-    pass: "runjhdyytzdcfdck",
+    user: "the email address you want to send from", // should be gmail address
+    pass: "the app password you generated",
   },
 });
 
 // setup email data with unicode symbols
 const sendEmail = (to, subject, text) => {
   const mailOptions = {
-    from: "baleesha01@gmail.com",
+    from: "the email address you want to send from", // should be gmail address
     to,
     subject,
     text,
   };
+
+  console.log(mailOptions);
 
   // send mail with defined transport object
 
